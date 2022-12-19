@@ -1,6 +1,9 @@
 Status = "";
 objects = [];
-cars = ["Bugatti", "Lamborghini", "Porche", "Rolls-Royce", "Mercedes", "BMW"];
+song = ""; 
+function preload(){
+    song = loadSound("ALARM.mp3");
+}
 function setup() {
     canvas = createCanvas(640, 420);
     canvas.center();
@@ -8,10 +11,6 @@ function setup() {
     video.hide();
     objectDetector = ml5.objectDetector('cocossd', modelloaded);
     document.getElementById("status").innerHTML = "Status: Detecting object";
-    for(var k = 0; k < cars.length; k++){
-        random_car = Math.floor(Math.random() * cars.length);
-        console.log(cars[random_car]);
-    }
 }
 
 function modelloaded() {
@@ -45,10 +44,22 @@ function draw() {
             noFill();
             stroke(random(255), random(255), random(255));
             rect(objects[i].x, objects[i].y, objects[i].width, objects[i].height);
-
-    
+            if(objects[i].label == 'person'){
+                document.getElementById("status").innerHTML = "Baby found";
+                song.stop();
+            }
+            else{
+                document.getElementById("status").innerHTML = "Baby not found";
+                song.play();
+            }
+            
         }
-    }
+        if(objects.length == 0){
+            document.getElementById("status").innerHTML = "Baby not found";
+            song.play();
+        } 
+        
     
+    }
 }
 
